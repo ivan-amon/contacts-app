@@ -6,7 +6,7 @@ session_start();
 $user_id = $_SESSION["user"]["id"];
 
 //Get all user addresses
-$statement = $conn->prepare("SELECT * FROM contacts WHERE user_id = :user_id LIMIT 1");
+$statement = $conn->prepare("SELECT * FROM contacts WHERE user_id = :user_id");
 $statement->execute([":user_id" =>  $_SESSION["user"]["id"]]);
 $userContacts = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -46,7 +46,7 @@ foreach($userContacts as $contact) {
             <div class="card-body">
               <h3 class="card tittle text-capitalize border-0"><?= $address["address"] ?></h3>
               <a href="editAddress.php?id=<?= $address["id"] ?>" class="btn btn-secondary mb-2">Edit Address</a>
-              <a href="deleteAddress.php?id<?= $address["id"]?>" class="btn btn-danger mb-2">Delete Address</a>
+              <a href="deleteAddress.php?id=<?= $address["id"]?>" class="btn btn-danger mb-2">Delete Address</a>
             </div>
           </div>
         </div>

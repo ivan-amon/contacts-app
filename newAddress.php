@@ -43,6 +43,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       ":contact_id" => $contact["id"],
       ":address" => $_POST["address"]
     ]);
+
+    $_SESSION["flash"] = ["message" => "Address {$_POST['address']} added"];
+
+
+    header("Location: home.php");
+    return;
   }
 }
 
@@ -86,7 +92,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                   <label for="name" class="col-md-4 col-form-label text-md-end">Contact Name</label>
     
                   <div class="col-md-6">
-                    <input id="name" type="tel" class="form-control" name="name" autocomplete="name" autofocus>
+                    <input id="name" type="tel" class="form-control" name="name" autocomplete="name" placeholder="Type an exising Contact Name" autofocus>
                   </div>
                 </div>
     
@@ -94,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                   <label for="phone_number" class="col-md-4 col-form-label text-md-end">Contact Phone Number</label>
     
                   <div class="col-md-6">
-                    <input id="phone_number" type="tel" class="form-control" name="phone_number" autocomplete="phone_number" autofocus>
+                    <input id="phone_number" type="tel" class="form-control" name="phone_number" autocomplete="phone_number" placeholder="Type an exising Phone Number" autofocus>
                   </div>
                 </div>
     

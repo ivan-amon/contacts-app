@@ -50,17 +50,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       $error = "Please fill all fields";
 
   } else { //Updating address
+    
+    $_SESSION["flash"] = ["message" => "Address {$address["address"]} Updated"]; //Flash message
+
     $address = $_POST["address"];
-    $statement = $conn->prepare("UPDATE addresses SER address = :address WHERE id = :id");
+    $statement = $conn->prepare("UPDATE addresses SET address = :address WHERE id = :id");
     $statement->execute([
       ":address" => $_POST["address"],
       ":id" => $id
     ]);
   }
 
-  $_SESSION["flash"] = ["message" => "Address {$address["address"]} Updated"];
-
-  header("Location: home.php");
+  header("Location: addresses.php");
   return;
 }
 
@@ -80,7 +81,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?= $error ?>
               </p>
             <?php endif?>
-            <form method="POST" action="newAddress.php">
+            <form method="POST" action="editAddress.php?id=<?= $address["id"] ?>">
               <div class="mb-3 row">
                 <label for="address" class="col-md-4 col-form-label text-md-end">Address</label>
   
