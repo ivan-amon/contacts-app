@@ -1,0 +1,11 @@
+.navbar img {
+    width: 1.6rem;
+}
+
+.welcome {
+    min-height: 100%;
+    overflow: hidden; 
+    background: url("../img/background.jpg");    
+    background-position: center center;
+    background-size: cover;
+}

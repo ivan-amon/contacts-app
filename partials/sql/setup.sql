@@ -1,0 +1,33 @@
+DROP DATABASE IF EXISTS contacts_app;
+
+CREATE DATABASE contacts_app;
+
+USE contacts_app;
+
+CREATE TABLE users (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE contacts (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL,
+
+    FOREIGN KEY (user_id) REFERENCES users(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+CREATE TABLE addresses (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    contact_id INT UNSIGNED NOT NULL,
+    address VARCHAR(255) NOT NULL,
+
+    FOREIGN KEY (contact_id) REFERENCES contacts(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
