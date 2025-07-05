@@ -3,10 +3,27 @@ require "database.php";
 
 session_start();
 
-$statement = $conn->prepare("SELECT * FROM addresses");
-$statement->execute();
+$user_id = $_SESSION["user"]["id"];
 
-$addresses = $statement->fetchAll(PDO::FETCH_ASSOC);
+//Get all user addresses
+$statement = $conn->prepare("SELECT * FROM contacts WHERE user_id = :user_id LIMIT 1");
+$statement->execute([":user_id" =>  $_SESSION["user"]["id"]]);
+$userContacts = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+$addresses = [];
+
+//Iterating all user contacts, to get all user addresses
+foreach($userContacts as $contact) {
+  $statement = $conn->prepare("SELECT * FROM addresses WHERE contact_id = :contact_id");
+  $statement->execute([":contact_id" => $contact["id"]]);
+  $contactAddresses = $statement->fetchAll(PDO::FETCH_ASSOC);
+  
+  foreach($contactAddresses as $address) {
+    array_push($addresses, $address);
+  }
+}
+
+
 
 ?>
 
