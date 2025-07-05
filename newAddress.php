@@ -10,31 +10,39 @@ if(!isset($_SESSION["user"])) {
   return;
 }
 
-//Get all conctacts to add an address to one of them
+//Check if the user has contacts to add addresses
 $statement = $conn->prepare("SELECT * FROM contacts WHERE user_id = :user_id");
 $statement->bindParam(":user_id", $_SESSION["user"]["id"]);
 $statement->execute();
 
 $contacts = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-//Adding the contact
+//Adding the Address
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $name = $_POST["name"];
   $phone_number = $_POST["phone_number"];
 
-  $statement = $conn->prepare("SELECT * FROM contacts WHERE name = :name AND phone_number = :phone_number");
-  $statement->exectute([
+  $statement = $conn->prepare("SELECT * FROM contacts WHERE name = :name AND phone_number = :phone_number LIMIT 1");
+  $statement->execute([
     ":name" => $_POST["name"],
     ":phone_number" => $_POST["phone_number"]
   ]);
 
+  $contact = $statement->fetch(PDO::FETCH_ASSOC);
+
+  //Checking form & if contact exists
   if(empty($_POST["address"]) || empty($_POST["name"]) || empty($_POST["phone_number"])) {
       $error = "Please fill all fields";
   } else if($statement->rowCount() == 0) {
       $error = "Contact no found";
-  } else {
-     echo "Ok";
+
+  } else { //Adding Address to the contact
+    $statement = $conn->prepare("INSERT INTO addresses (contact_id, address) VALUES (:contact_id, :address)");
+    $statement->execute([
+      ":contact_id" => $contact["id"],
+      ":address" => $_POST["address"]
+    ]);
   }
 }
 
